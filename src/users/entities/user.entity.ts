@@ -1,3 +1,4 @@
+// Core
 import { FileEntity } from 'src/files/entities/file.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 

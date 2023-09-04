@@ -20,7 +20,7 @@ export class UsersService {
     });
   }
 
-  async findUserById(email: number) {
+  async findUserById(id: number) {
     return this.repository.findOneBy({
       id,
     });

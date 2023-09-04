@@ -7,6 +7,7 @@ import {
   UploadedFile,
   MaxFileSizeValidator,
   ParseFilePipe,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
@@ -14,9 +15,11 @@ import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 // Other
 import { FilesService } from './files.service';
 import { fileStorage } from './storage';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
 @Controller('files')
 @ApiTags('Posts')
+@UseGuards(JwtAuthGuard)
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
