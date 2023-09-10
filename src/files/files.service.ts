@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 // Other
 import { FileEntity } from './entities/file.entity';
+import { FileType } from './files.controller';
 
 @Injectable()
 export class FilesService {
@@ -12,7 +13,7 @@ export class FilesService {
     @InjectRepository(FileEntity)
     private repository: Repository<FileEntity>,
   ) {}
-  findAll() {
-    return this.repository.find();
+  findAll(userId: number, fileType: FileType) {
+    const queryBuilder = this.repository.createQueryBuilder('file');
   }
 }

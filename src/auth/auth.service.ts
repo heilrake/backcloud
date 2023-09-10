@@ -36,6 +36,12 @@ export class AuthService {
   }
 
   async login(user: UserEntity) {
-    return this.jwtService.sign({ id: user.id });
+    try {
+      const payload = { id: user.id };
+      return { token: this.jwtService.sign(payload) };
+    } catch (err) {
+      console.log(err);
+      throw new ForbiddenException('flow login ');
+    }
   }
 }

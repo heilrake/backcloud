@@ -17,9 +17,14 @@ async function bootstrap() {
     .setTitle('OpenCloud service')
     .setDescription('The OpenCloud API description')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('swagger', app, document);
+  SwaggerModule.setup('swagger', app, document, {
+    swaggerOptions: {
+      persistAuthorizations: true,
+    },
+  });
 
   await app.listen(4444);
 }

@@ -18,8 +18,8 @@ import { JwtStrategy } from './strategies/jwt.strategy';
       inject: [ConfigService],
       useFactory: async (ConfigService: ConfigService) => {
         return {
-          secret: ConfigService.get(process.env.SECRET_KEY),
-          signOptions: { expiresIn: ConfigService.get(process.env.EXPIRES_IN) },
+          secret: ConfigService.get('SECRET_KEY'),
+          signOptions: { expiresIn: ConfigService.get('EXPIRES_IN') },
         };
       },
     }),

@@ -8,23 +8,31 @@ import {
   MaxFileSizeValidator,
   ParseFilePipe,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 
 // Other
 import { FilesService } from './files.service';
 import { fileStorage } from './storage';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { UserId } from 'src/decorator/user-id.decorator';
+
+export enum FileType {
+  PHOTOS = 'photos',
+  TRASH = 'trash',
+}
 
 @Controller('files')
 @ApiTags('Posts')
 @UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
   @Get()
-  findAll() {
+  findAll(@UserId() userId: number, @Query('type') fileType: FileType) {
     return this.filesService.findAll();
   }
 
