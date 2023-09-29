@@ -9,6 +9,7 @@ import {
   ParseFilePipe,
   UseGuards,
   Query,
+  Delete,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
@@ -18,24 +19,18 @@ import { FilesService } from './files.service';
 import { fileStorage } from './storage';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { UserId } from 'src/decorator/user-id.decorator';
-
-export enum FileType {
-  PHOTOS = 'photos',
-  TRASH = 'trash',
-}
+import { FileType } from './entities/file.entity';
 
 @Controller('files')
-@ApiTags('Posts')
+@ApiTags('files')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
-
   @Get()
   findAll(@UserId() userId: number, @Query('type') fileType: FileType) {
-    return this.filesService.findAll();
+    return this.filesService.findAll(userId, fileType);
   }
-
   @Post()
   @UseInterceptors(
     FileInterceptor('file', {
@@ -62,7 +57,13 @@ export class FilesController {
       }),
     )
     file: Express.Multer.File,
+    @UserId() userId: number,
   ) {
-    return file;
+    return this.filesService.create(file, userId);
+  }
+  @Delete()
+  remove(@UserId() userId: number, @Query('ids') ids: string) {
+    // files?ids=1,2,7,8
+    return this.filesService.remove(userId, ids);
   }
 }
